@@ -12,3 +12,5 @@ Disallow: /fancybox/
 
 Sitemap: http://www.sedate.cc/sitemap.xml
 Sitemap: http://www.sedate.cc/baidusitemap.xml
+Sitemap: http://sedate.cc/sitemap.xml
+Sitemap: http://sedate.cc/baidusitemap.xml
