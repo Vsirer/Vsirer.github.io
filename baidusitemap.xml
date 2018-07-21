@@ -4,6 +4,32 @@
 
     
   <url>
+    <loc>http://sedate.cc/MySQL-DIOS-Dump-in-One-Shot-UNION-Injection.html</loc>
+    <lastmod>2018-07-21T17:30:03.000Z</lastmod>
+    <data>
+        <display>
+        <title>MySQL DIOS(Dump in One Shot) UNION Injection</title>
+        <pubTime>2018-07-21T15:11:22.000Z</pubTime>
+        
+        <tag>数据库</tag>
+         
+        <tag>MySQL</tag>
+         
+        <tag>sqli</tag>
+         
+        <tag>DIOS</tag>
+         
+         
+           
+             
+              <breadCrumb title="Sec" url="http://sedate.cc/categories/Sec/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://sedate.cc/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E5%AE%89%E5%85%A8.html</loc>
     <lastmod>2018-07-04T08:20:19.000Z</lastmod>
     <data>

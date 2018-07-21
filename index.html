@@ -167,6 +167,40 @@
 
     <div class="post-header index">
         <h1 class="title">
+            <a href="/MySQL-DIOS-Dump-in-One-Shot-UNION-Injection.html">
+                MySQL DIOS(Dump in One Shot) UNION Injection
+            </a>
+        </h1>
+        <div class="post-info">
+            
+                <span class="date">2018-07-21</span>
+            
+            
+            
+                <span class="category">
+                    <a href="/categories/Sec/">Sec</a>
+                </span>
+            
+        </div>
+    </div>
+
+    
+        <div class="content">
+            <h3 id="Dump-In-One-Shot-DIOS"><a href="#Dump-In-One-Shot-DIOS" class="headerlink" title="Dump In One Shot(DIOS)"></a>Dump In One Shot(DIOS)</h3><p>使用一条SQL语句，一次HTTP请求注入出数据库所有库名-表名-列名，以及一些数据库基本信息<br>本文记录一下基于MySQL UNION Injection的DIOS技术<br><br>使用DIOS要注意的mysql函数：<br>CONCAT()：将参数连接返回连接后字符串，<font color="red">当任意参数为NULL时，则返回NULL</font><br>GROUP_CONCAT()：将字段值拼接为一行返回，<font color="red">默认长度限制为1024</font></p>
+<h3 id="0x00-首先来看一个用来获取所有数据库的查询语句"><a href="#0x00-首先来看一个用来获取所有数据库的查询语句" class="headerlink" title="0x00 首先来看一个用来获取所有数据库的查询语句"></a>0x00 首先来看一个用来获取所有数据库的查询语句</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(select (@x) from (select(@x:=0x00),(select (@x) from (information_schema.schemata)where (@x)in (@x:=concat(@x,schema_name,&apos;&lt;br&gt;&apos;))))x)</span><br></pre></td></tr></table></figure>
+<img src="/MySQL-DIOS-Dump-in-One-Shot-UNION-Injection/image.png">
+<p><br>上面的sql，在一行中返回了所有数据库名。<br><br>
+        </div>
+        <a href="/MySQL-DIOS-Dump-in-One-Shot-UNION-Injection.html" class="read-more">Read More</a>
+    
+
+</div>
+            
+                
+<div class="post">
+
+    <div class="post-header index">
+        <h1 class="title">
             <a href="/小程序安全.html">
                 小程序安全
             </a>
@@ -251,6 +285,10 @@
     <div class="col-xs-6 col-sm-6 col-md-3 col-lg-3 recent-posts">
         <h2>Recent Posts</h2>
         <ul>
+            
+            <li>
+                <a class="footer-post" href="/MySQL-DIOS-Dump-in-One-Shot-UNION-Injection.html">MySQL DIOS(Dump in One Sh</a>
+            </li>
             
             <li>
                 <a class="footer-post" href="/小程序安全.html">小程序安全</a>

