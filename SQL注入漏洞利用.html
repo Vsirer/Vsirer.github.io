@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+    <!--baidu-site-verification-->
+    
+        <meta name="baidu-site-verification" content="UAvChuZhGT" />
+    
+
+    <!--google-site-verification-->
+    
+        <meta name="google-site-verification" content="Z-s1tzkNvOFbS6qprnYzpvlt_7EK4mXhJaPAjYwvch0" />
+    
+
+    <!--Description-->
+    
+        <meta name="description" content="当遇到注入点丢到sqlmap里，–level 5 –risk 3跑不出来时怎么办？放弃或者手注自己写脚本？见过一些人sqlmap跑不了撸起袖子就写脚本整，很累啊，脱裤子还可能遇到各种问题。有sqlmap这么强大完善得工具，大部分时候根据实际情况修改一些地方就可以进行漏洞利用了这里记录两个注入点，通过分析修改请求内容，脚本内容，来让原来sqlmap识别不出的注入点成功注入。
+0x00 实例一：有过滤时怎么办
+首先，看一个error注入，通过参数中加入单引号，成功引发报错并回显过来，是mysql order by注入。">
+    
+
+    <!--Keywords-->
+    
+        <meta name="keywords" content="小程序,小程序安全,前端安全,web安全,sqli,MySQL,DIOS,Dump in One shot,sqlmap,Sedate,个人博客,技术博客,渗透测试,Web安全,编程开发">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="Sedate">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="SQL注入漏洞利用"/>
+    
+
+    <!--Open Graph Description-->
+    
+        <meta name="og:description" content="当遇到注入点丢到sqlmap里，–level 5 –risk 3跑不出来时怎么办？放弃或者手注自己写脚本？见过一些人sqlmap跑不了撸起袖子就写脚本整，很累啊，脱裤子还可能遇到各种问题。有sqlmap这么强大完善得工具，大部分时候根据实际情况修改一些地方就可以进行漏洞利用了这里记录两个注入点，通过分析修改请求内容，脚本内容，来让原来sqlmap识别不出的注入点成功注入。
+0x00 实例一：有过滤时怎么办
+首先，看一个error注入，通过参数中加入单引号，成功引发报错并回显过来，是mysql order by注入。">
+    
+
+    <!--Open Graph Site Name-->
+    <meta property="og:site_name" content="[Sedate@0x00]$ su - root"/>
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article" />
+    
+
+    <!--Page Cover-->
+    
+
+    <meta name="twitter:card" content="summary" />
+    
+
+    <!-- Title -->
+    
+    <title>SQL注入漏洞利用 - [Sedate@0x00]$ su - root</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css" integrity="sha384-y3tfxAZXuh4HwSYylfB+J125MxIs6mR5FOHamPBG064zB+AFeWH94NdvaCBm8qnd" crossorigin="anonymous">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Gallery -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet" />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!-- Google Analytics -->
+    
+
+
+</head>
+
+
+<body>
+
+<div class="bg-gradient"></div>
+<div class="bg-pattern"></div>
+
+<!-- Menu -->
+<!--Menu Links and Overlay-->
+<div class="menu-bg">
+    <div class="menu-container">
+        <ul>
+            
+            <li class="menu-item">
+                <a href="/">
+                    Home
+                </a>
+            </li>
+            
+            <li class="menu-item">
+                <a href="/archives">
+                    Archives
+                </a>
+            </li>
+            
+            <li class="menu-item">
+                <a href="/categories">
+                    Categories
+                </a>
+            </li>
+            
+            <li class="menu-item">
+                <a href="/tags">
+                    Tags
+                </a>
+            </li>
+            
+            <li class="menu-item">
+                <a href="/contact.html">
+                    Contact
+                </a>
+            </li>
+            
+            <li class="menu-item">
+                <a href="/about">
+                    About
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+<!--Hamburger Icon-->
+<nav>
+    <a href="#menu"></a>
+</nav>
+
+<div class="container">
+
+    <!-- Main Content -->
+    <div class="row">
+    <div class="col-sm-12">
+
+        <!--Title and Logo-->
+        <header>
+    <div class="logo">
+        <a href="/"><i class="logo-icon fa fa-cube" aria-hidden="true"></i></a>
+        
+    </div>
+</header>
+
+        <section class="main">
+            
+<div class="post">
+
+    <div class="post-header">
+        <h1 class="title">
+            <a href="/SQL注入漏洞利用.html">
+                SQL注入漏洞利用
+            </a>
+        </h1>
+        <div class="post-info">
+            
+                <span class="date">2018-08-01</span>
+            
+            
+            
+                <span class="category">
+                    <a href="/categories/Sec/">Sec</a>
+                </span>
+            
+        </div>
+    </div>
+
+    <div class="content">
+
+        <!-- Gallery -->
+        
+
+        <!-- Post Content -->
+        <p>当遇到注入点丢到sqlmap里，–level 5 –risk 3跑不出来时怎么办？放弃或者手注自己写脚本？<br>见过一些人sqlmap跑不了撸起袖子就写脚本整，很累啊，脱裤子还可能遇到各种问题。<br>有sqlmap这么强大完善得工具，大部分时候根据实际情况修改一些地方就可以进行漏洞利用了<br><br>这里记录两个注入点，通过分析修改请求内容，脚本内容，来让原来sqlmap识别不出的注入点成功注入。</p>
+<h3 id="0x00-实例一：有过滤时怎么办"><a href="#0x00-实例一：有过滤时怎么办" class="headerlink" title="0x00 实例一：有过滤时怎么办"></a>0x00 实例一：有过滤时怎么办</h3><img src="/SQL注入漏洞利用/image1.png">
+<p><br>首先，看一个error注入，通过参数中加入单引号，成功引发报错并回显过来，是mysql order by注入。<br><br><a id="more"></a><br><img src="/SQL注入漏洞利用/image2.png"><br>手注在确认一下是否能注，ok，很顺利，接下来直接丢sqlmap跑。<br><br><img src="/SQL注入漏洞利用/image3.png"><br>为了演示，level，risk直接调到最高，可以看到payload  1.)”(,))’)( 会引起sql报错，然后sqlmap认为大概是个注入，后面工具会继续使用更多payload进行测试。<br><br><img src="/SQL注入漏洞利用/image4.png"><br>结果却说这并不是一个注入。而手注明明已经注出数据了。<br>会不会有waf？有一些过滤呢？-v 3 拿到sqlmap payload后，找找原因。<br><br><img src="/SQL注入漏洞利用/image5.png"><br>使用sqlmap的payload提示too many？语句太长？并不是，尝试插入一堆字母依旧会报错，不会提示too many，<br>所以猜测可能payload中一些关键字被拦截到，然后返回个这样的提示。<br>继续尝试，<br>输入CONCAT()        提示too many<br>注释分割CONCAT/**/()    页面报错<br>输入SELECT aaa        提示too many<br>注释分割SELECT/**/aaa    页面报错<br>原来是有些简单的防护，注释就可以绕过，使用commentbeforeparentheses与space2comment或者直接使用versionedmorekeywords tamper进行绕过。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlmap -u &quot;https://www.xxx.com/?category=null&amp;data=null&amp;m=Shop&amp;pageIndex=1&amp;pageSize=20&amp;s=itemList&amp;sortField=1*--&amp;sortOrder=&quot; --random-agent --dbms mysql --technique E -v 3 --tamper versionedmorekeywords</span><br></pre></td></tr></table></figure></p>
+<p>使用了tamper依旧提示这不是个注入点，那就继续拿sqlmap paylaod分析原因<br><br><img src="/SQL注入漏洞利用/image6.png"><br>可以看到，使用注释绕过后，返回得不是too many也不是报错页面了，而是一段json，<br>手工测试时并没有出现这个情况，仔细看payload发现concat连接了十六进制，而手注时没有加上hex，会不会这个原因导致的？<br><br><img src="/SQL注入漏洞利用/image7.png"><br>将hex替换为正常字符，这次成功注入了，这样的话只要让sqlmap取消掉拼接hex不就可以了。<br>但是sqlmap -hh，查看sqlmap.conf，/lib/core/settings.py，都未找到相应开关。<br>这时候怎么办，注入点已经完全可以利用了，撸个脚本脱裤子？每个裤子几百张表，脱一半断了怎么半？超时怎么办？乱码怎么办？这些都要自己在造个轮子解决一遍？不够费事的，sqlmap缓存，多线程，编码都帮你写得好好的，为何不用？<br><br><br>接下来对sqlmap源码进行调试，找到问题点，进行修改<br>打开pycharm，点击edit configurations<br><br><img src="/SQL注入漏洞利用/image8.png"><br>script parameters处写入sqlmap参数，py版本选择2.7<br>之后就可以对sqlmap进行debug了<br>先看一下xml/error_based.xml中error注入的payload<br><br><img src="/SQL注入漏洞利用/image9.png"><br>可以看到，xml中，concat拼接的字符串以DELIMITER_START与DELIMITER_STOP表示，<br>全局搜一下DELIMITER_START，看看哪里对它进行了操作<br><br><img src="/SQL注入漏洞利用/image10.png"><br>通过搜索看到，agent.py中的cleanupPayload()方法对DELIMITER_START与DELIMITER_STOP进行了操作，<br>接着在这个方法中下段点跟踪调试sqlmap<br><br><img src="/SQL注入漏洞利用/image11.png"><br>debug运行，成功在断点处阻塞了，此时payload为 ‘1(.,..),.\\‘“‘  不是想要的，ctrl+alt+r放掉，直到找到需要的语句<br><br><img src="/SQL注入漏洞利用/image12.png"><br>成功找到concat语句与原始字符串，继续跟踪<br><br><img src="/SQL注入漏洞利用/image13.png"><br>最终发现在agent.py中调用了unescaper.escape方法进行编码处理，将此行注释掉并全局搜索unescaper.escape，<br>将lib/core/error/use.py中的此方法也注释掉，防止进一步error注入时进行编码<br><br>之后再次执行sqlmap<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlmap -u &quot;https://www.xxx.com/?category=null&amp;data=null&amp;m=Shop&amp;pageIndex=1&amp;pageSize=20&amp;s=itemList&amp;sortField=1*--&amp;sortOrder=&quot; --random-agent --dbms mysql --technique E -v 3 --tamper versionedmorekeywords --current-db</span><br></pre></td></tr></table></figure></p>
+<img src="/SQL注入漏洞利用/image14.png">
+<p><br>sqlmap成功注入出当前数据库，payload中concat拼接的字符串也为原始字符串</p>
+<h3 id="0x01-实例二：封IP时怎么办"><a href="#0x01-实例二：封IP时怎么办" class="headerlink" title="0x01 实例二：封IP时怎么办"></a>0x01 实例二：封IP时怎么办</h3><img src="/SQL注入漏洞利用/image15.png">
+<p><br>依旧是一个error注入<br>注入很顺利，语句没拦截，但是仅仅是手工测试，注入个三四次就会拉黑ip，换vpn 换代理？没那么多节点，免费节点屎一样的速度更别提。<br><br>尝试溢出看是否可以绕过拉黑限制，发现不会在封ip了。<br><br><img src="/SQL注入漏洞利用/image16.png"><br>but，十次请求有八次会直接断开连接，这样得话使用sqlmap跑的话，直接断开连接后，sqlmap就不会在继续了<br><br>这时咋办，自己撸脚本跑？<br><br><img src="/SQL注入漏洞利用/image17.png"><br>通过sqlmap -hh可以看到，有个–retries参数，可以设置超时时重连次数<br>直接将数据包保存为文件，设置retries为20次<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlmap -r sql.txt --random-agent --dbms mssql --technique E  --retries 20  -D jujiao --tables -v 3</span><br></pre></td></tr></table></figure></p>
+<img src="/SQL注入漏洞利用/image18.png">
+<p><br>在不停的重新请求中，成功识别出注入并跑出数据。</p>
+<h3 id="0x02-LAST"><a href="#0x02-LAST" class="headerlink" title="0x02 LAST"></a>0x02 LAST</h3><p>在注入点直接丢sqlmap里跑不了时，多分析找原因，根据原因修改请求包或者slqmap，造轮子学习的必要还是有的，但是没造出牛逼的轮子之前，在实战中有更牛逼更完善的工具，就用其所长，好好利用它，要不当改完轮子bug时，漏洞都修复了就尴尬了。</p>
+<p><hr><br>交流群：NTUzNzI0NzM3</p>
+
+    </div>
+
+    
+
+    
+        <div class="post-tags">
+            <i class="fa fa-tags" aria-hidden="true"></i>
+            <a href="/tags/数据库/">#数据库</a> <a href="/tags/sqli/">#sqli</a> <a href="/tags/sqlmap/">#sqlmap</a>
+        </div>
+    
+
+    <!-- Comments -->
+    
+
+</div>
+        </section>
+
+    </div>
+</div>
+
+
+</div>
+
+<!-- Footer -->
+<div class="push"></div>
+
+<footer class="footer-content">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 footer-about">
+                <h2>About</h2>
+                <p>
+                    Just do IT.
+                </p>
+            </div>
+            
+    <div class="col-xs-6 col-sm-6 col-md-3 col-lg-3 recent-posts">
+        <h2>Recent Posts</h2>
+        <ul>
+            
+            <li>
+                <a class="footer-post" href="/SQL注入漏洞利用.html">SQL注入漏洞利用</a>
+            </li>
+            
+            <li>
+                <a class="footer-post" href="/MySQL-DIOS-Dump-in-One-Shot-UNION-Injection.html">MySQL DIOS(Dump in One Sh</a>
+            </li>
+            
+            <li>
+                <a class="footer-post" href="/小程序安全.html">小程序安全</a>
+            </li>
+            
+            <li>
+                <a class="footer-post" href="/hello-world.html">Hello World</a>
+            </li>
+            
+        </ul>
+    </div>
+
+
+
+            
+<div class="col-xs-6 col-sm-6 col-md-3 col-lg-3 footer-categories">
+    <h2>Categories</h2>
+    <ul>
+        
+        <li>
+            <a class="footer-post" href="/categories/Code/">Code</a>
+        </li>
+        
+        <li>
+            <a class="footer-post" href="/categories/Sec/">Sec</a>
+        </li>
+        
+    </ul>
+</div>
+
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <ul class="list-inline footer-social-icons">
+                    
+                    <li class="list-inline-item">
+                        <a href="https://github.com/Sedate0x00">
+                            <span class="footer-icon-container">
+                                <i class="fa fa-github"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    <li class="list-inline-item">
+                        <a href="mailto:sedate0x00@gmail.com">
+                            <span class="footer-icon-container">
+                                <i class="fa fa-envelope-o"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li class="list-inline-item">
+                        <a href="\#">
+                            <span class="footer-icon-container">
+                                <i class="fa fa-rss"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="footer-copyright">
+                    Blog by <a href="http://sedate.cc/">Sedate</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- After footer scripts -->
+
+<!-- jQuery -->
+<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+
+<!-- Tween Max -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/gsap/1.18.5/TweenMax.min.js"></script>
+
+<!-- Gallery -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- Custom JavaScript -->
+<script src="/js/main.js"></script>
+
+<!-- Snow JavaScript -->
+<script src="/js/snow.js"></script>
+
+<script>
+    createSnow('http://sedate.cc/img/', 60);
+</script>
+
+<!-- Disqus Comments -->
+
+
+<!-- Baidu Push -->
+
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+</body>
+
+</html>
